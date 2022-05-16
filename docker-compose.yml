@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  db:
+    image: mariadb:latest
+    container_name: php_dev_db
+    restart: always
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: "true"
+      MARIADB_USER: deluxecx
+      MARIADB_PASSWORD: ULDB9rq87L878dgZnmjTQZZmJx
+      MARIADB_DATABASE: deluxecx
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - internal-network
+  web:
+    build:
+      context: ./www
+      dockerfile: .dockerfile
+    image: web
+    container_name: php_dev_web
+    restart: always
+    volumes:
+      - ./www/:/var/www
+    networks:
+      - internal-network
+    depends_on:
+      - db
+  nginx:
+    image: nginx:alpine
+    container_name: php_dev_nginx
+    volumes:
+      - ./www/:/var/www
+      - ./configs/nginx/:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    networks:
+      - internal-network
+      - exposed
+    restart: always
+    depends_on:
+      - web
+      - db
+networks:
+  internal-network:
+    driver: bridge
+    internal: true
+  exposed:
+    driver: bridge
