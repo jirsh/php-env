@@ -12,5 +12,5 @@ Then feel free to edit everything in the `www` directory!
 
 ## Notes
 
-- The dockerfile is named `.dockerfile` for nginx to block it's access.
+- The Dockerfile is named `.dockerfile` for nginx to block it's access.
 - This is a development enviorment that is **NOT** made for production!
